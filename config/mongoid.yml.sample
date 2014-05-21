@@ -1,0 +1,13 @@
+development:
+  sessions:
+    default:
+      database: push_notifier_development
+      hosts:
+        - localhost:27017
+
+test:
+  sessions:
+    default:
+      database: push_notifier_test
+      hosts:
+        - localhost:27017
