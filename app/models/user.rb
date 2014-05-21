@@ -4,6 +4,9 @@ class User
 
   field :shared_id, type: Integer
   field :devices, type: Array, default: []
+  index({ shared_id: 1 }, { unique: true, background: true })
+
+  scope :by_shared_id, ->(id) { where(shared_id: id) }
 
   validates :shared_id, presence: true
 
