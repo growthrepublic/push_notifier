@@ -1,6 +1,8 @@
 module API
   module V1
     class Base < Grape::API
+      include ErrorHandling
+
       version 'v1', using: :path
       mount API::V1::Users
 

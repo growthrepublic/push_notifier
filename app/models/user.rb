@@ -1,4 +1,6 @@
 class User
+  class NotFoundError < StandardError; end
+
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -18,5 +20,9 @@ class User
   def deregister_device(device)
     devices.delete(device)
     save
+  end
+
+  def notifier
+    UserNotifier.new(self)
   end
 end

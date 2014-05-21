@@ -43,4 +43,38 @@ describe API::V1::Users, type: :request do
       end
     end
   end
+
+  describe "POST /users/:shared_id/notify" do
+    let(:message) { "message" }
+
+    context "not existing user" do
+      it "does not find user" do
+        post "/api/v1/users/1/notify", { message: message }
+        expect(response.status).to eq 404
+      end
+    end
+
+    context "existing user" do
+      subject { create(:user, :with_device) }
+
+      before(:each) do
+        @notifications = []
+        expect(Notifier).to receive(:push) do |notification|
+          @notifications.push(notification)
+        end
+
+        post "/api/v1/users/#{subject.shared_id}/notify", { message: message }
+      end
+
+      it "sends proper notification" do
+        expect(@notifications).to_not be_empty
+        expect(@notifications.last.device_token).to eq subject.devices.last
+      end
+
+      it "returns user's entity" do
+        expect(json).to be_representation_of(User.last)
+          .with(user_presenter)
+      end
+    end
+  end
 end
