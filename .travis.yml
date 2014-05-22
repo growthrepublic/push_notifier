@@ -1,0 +1,12 @@
+language: ruby
+rvm:
+  - 2.1.1
+services:
+  - mongodb
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:test:prepare
+  - bundle exec rake
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.addUser("travis", "test");'
