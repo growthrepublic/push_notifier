@@ -4,7 +4,7 @@ RSpec::Matchers.define :be_representation_of do |expected|
       raise ArgumentError, "use :with to provide presenter class"
     end
 
-    actual == @presenter_class.new(expected).as_json.stringify_keys
+    actual == JSON.parse(@presenter_class.new(expected).to_json)
   end
 
   chain :with do |presenter_class|
