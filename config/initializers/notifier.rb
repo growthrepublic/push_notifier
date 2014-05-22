@@ -10,7 +10,7 @@ if Rails.env.production?
     passphrase:  cert_passphrase,
     gateway:     "gateway.push.apple.com")
 
-  Notifier.register_pusher(pusher, env)
+  Notifier.register_pusher(pusher, Rails.env)
 end
 
 if Rails.env.development?
@@ -19,5 +19,5 @@ if Rails.env.development?
     passphrase:  cert_passphrase,
     gateway:     "gateway.sandbox.push.apple.com")
 
-  Notifier.register_pusher(dev_pusher, env)
+  Notifier.register_pusher(dev_pusher, Rails.env)
 end
