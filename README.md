@@ -31,3 +31,22 @@ If it is your first time, running test suite for this app, run this to build db 
 And then run rspec:
 
       $ bundle exec rspec
+
+### Usage
+
+Application as is, has no authentication included, we use it internally,
+disabling external connections with Nginx config.
+You should pair your application users with User model in this application using
+"shared_id" key. With this approach, you will get unique data for each of your user.
+
+For now, API consists of three main endpoints:
+
+  - POST "devices" - updates user devices list with a new device token,
+  if user does not exist yet, it creates and initializes him with specified token,
+
+  - DELETE "devices" - deletes device token from user devices list,
+
+  - POST "notify" - sends message to user.
+
+You can play with them by setting up this application and visiting "/swagger" path,
+using your web browser.
