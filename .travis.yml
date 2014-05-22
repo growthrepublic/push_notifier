@@ -8,4 +8,5 @@ script:
   - bundle exec rake
 before_script:
   - sleep 15
-  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+  - mongo push_notifier_test --eval 'db.addUser("travis", "test");'
+  - cp config/mongoid.yml.sample config/mongoid.yml
