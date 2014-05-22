@@ -44,6 +44,36 @@ describe API::V1::Users, type: :request do
     end
   end
 
+  describe "DELETE /users/:shared_id/devices" do
+    context "not existing user" do
+      let(:token) { "token" }
+
+      it "does not find user" do
+        delete "/api/v1/users/1/devices", { token: token }
+        expect(response.status).to eq 404
+      end
+    end
+
+    context "existing user" do
+      let!(:user) { create(:user) }
+      let!(:token) { user.devices.last }
+
+      before(:each) do
+        delete "/api/v1/users/#{user.shared_id}/devices", { token: token }
+        user.reload
+      end
+
+      it "deregisters device" do
+        expect(user.devices).to_not include token
+      end
+
+      it "returns existing user's entity" do
+        expect(json).to be_representation_of(user)
+          .with(user_presenter)
+      end
+    end
+  end
+
   describe "POST /users/:shared_id/notify" do
     let(:message) { "message" }
 

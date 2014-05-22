@@ -25,4 +25,10 @@ class User
   def notifier
     UserNotifier.new(self)
   end
+
+  def self.find_by_shared_id!(shared_id)
+    user = by_shared_id(shared_id).first
+    raise NotFoundError, "User not found" if user.blank?
+    user
+  end
 end

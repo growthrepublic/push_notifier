@@ -6,13 +6,9 @@ module API
         namespace ':shared_id' do
           params { requires :message, type: String }
           post 'notify' do
-            @user = User.by_shared_id(params[:shared_id]).first
-            if @user
-              @user.notifier.push(params[:message])
-              present @user, with: API::V1::Entities::User
-            else
-              raise User::NotFoundError, "User not found"
-            end
+            @user = User.find_by_shared_id!(params[:shared_id])
+            @user.notifier.push(params[:message])
+            present @user, with: API::V1::Entities::User
           end
 
           resource "devices" do
@@ -20,6 +16,13 @@ module API
             post do
               @user = User.by_shared_id(params[:shared_id]).first_or_create!
               @user.register_device(params[:token])
+              present @user, with: API::V1::Entities::User
+            end
+
+            params { requires :token, type: String }
+            delete do
+              @user = User.find_by_shared_id!(params[:shared_id])
+              @user.deregister_device(params[:token])
               present @user, with: API::V1::Entities::User
             end
           end
