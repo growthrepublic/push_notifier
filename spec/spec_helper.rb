@@ -13,4 +13,6 @@ RSpec.configure do |config|
   config.before(:each) do
     Mongoid.purge!
   end
+
+  config.infer_spec_type_from_file_location!
 end
